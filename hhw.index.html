@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>HBDtoHW</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #ffeef3;
+      --bg-soft: #fff7fa;
+      --card-bg: #ffffff;
+      --card-soft: #ffeef5;
+      --accent: #ff7695;
+      --accent-soft: #ff9fb6;
+      --accent-light: #ffd5e1;
+      --text-main: #7b2541;
+      --text-sub: #b0738b;
+      --border-soft: #ffd6e5;
+      --shadow-soft: 0 18px 40px rgba(255, 160, 190, 0.3);
+      --radius-lg: 32px;
+      --radius-md: 22px;
+      --radius-pill: 999px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont,
+        "Noto Sans KR", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at top, #ffe3ec 0, #ffeef5 45%, #ffeef3 100%);
+      display: flex;
+      justify-content: center;
+      padding: 26px 14px 32px;
+      color: var(--text-main);
+    }
+
+    .wrap {
+      width: 100%;
+      max-width: 1120px;
+    }
+
+    /* 상단 네비 */
+    .nav {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 18px;
+      font-size: 13px;
+      color: var(--accent);
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .nav-icon {
+      font-size: 16px;
+      margin: 0 8px;
+    }
+
+    header {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    @media (max-width: 820px) {
+      header {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .hero-card,
+    .player-card,
+    .letters-card {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      border: 1px solid #ffe4ee;
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card {
+      padding: 22px 24px;
+      display: grid;
+      grid-template-columns: 160px minmax(0, 1fr);
+      gap: 18px;
+      background: radial-gradient(circle at top left, #fff7fa 0, #ffeef5 40%, #ffe6f0 100%);
+    }
+
+    @media (max-width: 640px) {
+      .hero-card {
+        grid-template-columns: minmax(0, 1fr);
+        text-align: center;
+        padding: 20px 18px;
+      }
+    }
+
+    .hero-img-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-img {
+      width: 150px;
+      height: 190px;
+      border-radius: 110px;
+      background: #fce9f0 center/cover no-repeat;
+      border: 5px solid #fff5fa;
+      box-shadow: 0 14px 28px rgba(226, 140, 170, 0.45);
+    }
+
+    .hero-text-main {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .hero-title {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      color: var(--text-main);
+    }
+
+    .hero-sub {
+      font-size: 13px;
+      color: var(--text-sub);
+      line-height: 1.7;
+    }
+
+    .hero-mini {
+      margin-top: 8px;
+      font-size: 11px;
+      color: var(--accent);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .hero-mini span.icon {
+      font-size: 12px;
+    }
+
+    .hero-footer {
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      font-size: 11px;
+    }
+
+    .pill {
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      background: #fff0f6;
+      border: 1px solid #ffd2e3;
+      color: var(--text-sub);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .pill-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .hero-footer span.subtext {
+      color: var(--text-sub);
+    }
+
+    /* 오른쪽 카드 (음악 비슷한 느낌) */
+    .player-card {
+      padding: 20px 22px 22px;
+      background: radial-gradient(circle at top, #fffafb 0, #ffeef5 48%, #ffe4ee 100%);
+    }
+
+    .player-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .player-label {
+      font-size: 12px;
+      color: var(--text-sub);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    .heart-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: none;
+      background: #ffe4ee;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: default;
+      color: var(--accent);
+      font-size: 15px;
+    }
+
+    .player-main {
+      display: grid;
+      grid-template-columns: 110px minmax(0, 1fr);
+      gap: 16px;
+      align-items: center;
+    }
+
+    @media (max-width: 640px) {
+      .player-main {
+        grid-template-columns: minmax(0, 1fr);
+        text-align: center;
+      }
+    }
+
+    .player-cover {
+      width: 110px;
+      height: 110px;
+      border-radius: 28px;
+      background: #fbe1ed center/cover no-repeat;
+      box-shadow: 0 12px 24px rgba(224, 132, 160, 0.4);
+      border: 4px solid #fff6fb;
+      margin: 0 auto;
+    }
+
+    .player-text-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: var(--text-main);
+    }
+
+    .player-text-sub {
+      font-size: 12px;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+
+    .player-bar {
+      position: relative;
+      width: 100%;
+      height: 4px;
+      border-radius: 999px;
+      background: #ffe0eb;
+      overflow: hidden;
+      margin: 8px 0 10px;
+    }
+
+    .player-bar-inner {
+      position: absolute;
+      inset: 0;
+      width: 45%;
+      background: linear-gradient(90deg, var(--accent), var(--accent-soft));
+    }
+
+    .player-time {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 10px;
+      color: var(--text-sub);
+      margin-bottom: 10px;
+    }
+
+    .player-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      margin-top: 4px;
+    }
+
+    .ctrl-btn-small {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: none;
+      background: #ffe3ee;
+      font-size: 13px;
+      color: var(--accent);
+      cursor: default;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ctrl-btn-main {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      border: none;
+      background: radial-gradient(circle at top, var(--accent-soft), var(--accent));
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 12px 26px rgba(255, 120, 160, 0.55);
+      font-size: 18px;
+      cursor: default;
+    }
+
+    /* 아래: 편지 갤러리 카드 */
+    .letters-card {
+      margin-top: 20px;
+      padding: 18px 20px 20px;
+      background: linear-gradient(145deg, #fff7fa, #ffeef5);
+    }
+
+    .letters-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .letters-title-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .letters-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-main);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .letters-title .icon {
+      font-size: 16px;
+    }
+
+    .letters-sub {
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+
+    .letters-badge {
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      background: #ffe0ec;
+      color: var(--accent);
+      font-size: 11px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .letters-badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 8px rgba(255, 118, 149, 0.8);
+    }
+
+    /* 카드 그리드 */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+    }
+
+    .letter-card {
+      background: var(--bg-soft);
+      border-radius: var(--radius-md);
+      padding: 11px 12px 12px;
+      border: 1px solid var(--border-soft);
+      box-shadow: 0 10px 20px rgba(255, 170, 190, 0.25);
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+      transition: transform 0.12s ease, box-shadow 0.12s ease,
+        border-color 0.12s ease, background 0.12s ease;
+    }
+
+    .letter-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.7), transparent 60%);
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    .letter-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 28px rgba(255, 160, 190, 0.35);
+      border-color: #ffc5da;
+      background: #fff2f7;
+    }
+
+    .letter-main {
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .letter-emoji {
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .letter-texts {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .letter-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 3px;
+      color: var(--text-main);
+      word-break: keep-all;
+    }
+
+    .letter-preview {
+      font-size: 11px;
+      color: var(--text-sub);
+      max-height: 32px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+
+    .letter-meta {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+      font-size: 10px;
+      color: var(--text-sub);
+      margin-top: 2px;
+      flex-wrap: wrap;
+    }
+
+    .letter-meta-left {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .letter-tag {
+      padding: 2px 6px;
+      border-radius: var(--radius-pill);
+      background: #ffe4f0;
+      border: 1px solid #ffd2e5;
+      font-size: 9px;
+      color: var(--text-sub);
+    }
+
+    .letter-open {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .letter-open .icon {
+      font-size: 13px;
+    }
+
+    footer {
+      margin-top: 12px;
+      text-align: right;
+      font-size: 10px;
+      color: var(--text-sub);
+    }
+
+    /* 모달 */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(255, 206, 224, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 18px;
+      z-index: 40;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .modal-inner {
+      width: 100%;
+      max-width: 720px;
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-soft);
+      box-shadow: 0 24px 60px rgba(222, 127, 158, 0.6);
+      padding: 16px 16px 18px;
+      position: relative;
+      animation: popIn 0.22s ease-out;
+      overflow: hidden;
+    }
+
+    @keyframes popIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .modal-title-group {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .modal-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .modal-title .icon {
+      font-size: 16px;
+      color: var(--accent);
+    }
+
+    .modal-meta {
+      font-size: 11px;
+      color: var(--text-sub);
+    }
+
+    .modal-close-btn {
+      border: none;
+      background: #ffe5f0;
+      color: var(--accent);
+      border-radius: 999px;
+      width: 32px;
+      height: 32px;
+      font-size: 18px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 16px rgba(216, 120, 148, 0.4);
+      transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+    }
+
+    .modal-close-btn:hover {
+      background: #ffd5e5;
+      transform: translateY(-1px);
+      box-shadow: 0 10px 20px rgba(216, 120, 148, 0.5);
+    }
+
+    .paper-wrap {
+      margin-top: 6px;
+      background: #fff9fb;
+      border-radius: var(--radius-md);
+      padding: 18px 16px 18px;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #ffe1ee;
+    }
+
+    .paper-wrap::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(
+        to bottom,
+        transparent 0,
+        transparent 22px,
+        #ffe3ef 23px
+      );
+      background-size: 100% 24px;
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    .paper-inner {
+      position: relative;
+      color: var(--text-main);
+      font-size: 14px;
+      line-height: 1.8;
+      white-space: pre-wrap;
+    }
+
+    .paper-footer {
+      position: relative;
+      margin-top: 16px;
+      font-size: 13px;
+      color: var(--text-sub);
+      text-align: right;
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding-top: 20px;
+      }
+      .letters-card {
+        padding: 16px 14px 16px;
+      }
+      .modal-inner {
+        padding: 14px 12px 16px;
+      }
+      .paper-wrap {
+        padding: 14px 12px 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="nav">
+      <span class="nav-icon">♡</span>
+      TO.HHW
+      <span class="nav-icon">♡</span>
+    </div>
+
+    <header>
+      <!-- 왼쪽 메인 카드 -->
+      <section class="hero-card">
+        <div class="hero-img-wrap">
+          <!-- 여기 배경이미지 URL을 네가 가진 한원이 사진으로 바꿔도 됨 -->
+          <div
+            class="hero-img"
+            style="background-image: url('https://via.placeholder.com/300x380/ffeef5/ffffff?text=HW');"
+          ></div>
+        </div>
+        <div class="hero-text-main">
+          <h1 class="hero-title">HBDtoHW</h1>
+          <p class="hero-sub">
+            후한원의 생일을 기념하는 개인 팬페이지입니다.<br />
+            전 세계 팬들이 남긴 생일 편지들을 한 곳에 차곡차곡 모아두었어요.
+          </p>
+          <div class="hero-mini">
+            <span class="icon">❤</span>
+            <span>한원이의 〇〇번째 생일을 함께 축하합니다.</span>
+          </div>
+          <div class="hero-footer">
+            <div class="pill">
+              <span class="pill-dot"></span>
+              <span>Birthday Letter Archive</span>
+            </div>
+            <span class="subtext">카드를 눌러 편지를 열어보세요.</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 오른쪽 카드 (분위기용) -->
+      <section class="player-card">
+        <div class="player-top">
+          <span class="player-label">now playing</span>
+          <button class="heart-btn" type="button" aria-label="heart">
+            ♥
+          </button>
+        </div>
+        <div class="player-main">
+          <div
+            class="player-cover"
+            style="background-image: url('https://via.placeholder.com/220x220/fbe1ed/ffffff?text=HW');"
+          ></div>
+          <div>
+            <div class="player-text-title">HBD Playlist</div>
+            <div class="player-text-sub">LUCKY MACHO · fanmade</div>
+
+            <div class="player-bar">
+              <div class="player-bar-inner"></div>
+            </div>
+            <div class="player-time">
+              <span>0:00</span>
+              <span>3:13</span>
+            </div>
+
+            <div class="player-controls">
+              <button class="ctrl-btn-small" type="button">⏮</button>
+              <button class="ctrl-btn-main" type="button">▶</button>
+              <button class="ctrl-btn-small" type="button">⏭</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </header>
+
+    <!-- 아래: 편지 갤러리 -->
+    <section class="letters-card">
+      <div class="letters-header">
+        <div class="letters-title-wrap">
+          <div class="letters-title">
+            <span class="icon">💌</span>
+            Birthday Letters
+          </div>
+          <p class="letters-sub">
+            생일을 맞은 한원에게 전해진 편지들입니다. 카드를 눌러 전체 내용을 확인해보세요.
+          </p>
+        </div>
+        <div class="letters-badge">
+          <span class="letters-badge-dot"></span>
+          <span id="lettersCount">0 letters</span>
+        </div>
+      </div>
+
+      <div id="cardGrid" class="card-grid"></div>
+    </section>
+
+    <footer>Made with love for HW · 개인 비영리 팬페이지</footer>
+  </div>
+
+  <!-- 모달 -->
+  <div id="letterModal" class="modal-backdrop hidden">
+    <div class="modal-inner">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-title">
+            <span class="icon">💗</span>
+            <span id="modalTitle"></span>
+          </div>
+          <div id="modalMeta" class="modal-meta"></div>
+        </div>
+        <button id="modalCloseBtn" class="modal-close-btn" type="button" aria-label="닫기">
+          ×
+        </button>
+      </div>
+
+      <div class="paper-wrap">
+        <div id="modalContent" class="paper-inner"></div>
+        <div id="modalFooter" class="paper-footer"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ★★★★★ 여기 배열에 편지 계속 추가하면 됨 (100개, 200개 상관 없음) ★★★★★
+    const LETTERS = [
+      {
+        id: 1,
+        emoji: "💌",
+        title: "첫 번째 생일 편지",
+        date: "2024.11.28",
+        from: "hruwa",
+        preview: "哥哥~生日快乐，感谢一直为哥哥加油的人们慷慨地分享爱…",
+        content: `哥哥~生日快乐，感谢一直为哥哥加油的人们慷慨地分享爱。❤️
+虽然离得很远，但心最亲近的是粉丝和偶像的距离，非常爱你。
+
+希望生日那天多吃点~做所有想做的事。
+我很爱你，请知道我总是在远处为你加油，
+谢谢你再次挑战成为偶像的梦想。`,
+        tag: "CN · 생일편지"
+      },
+      {
+        id: 2,
+        emoji: "🎀",
+        title: "행복만 가득했으면 하는 마음으로",
+        date: "2024.11.28",
+        from: "한 한국 팬",
+        preview: "후한원 너무너무 고생 많았고, 생일 축하해. 맛있는 거 많이 먹고…",
+        content: `후한원 너무너무 고생 많았고 ❤️
+생일 축하해! 맛있는 거 많이 먹고 항상 행복한 날들만 있길 바래.
+
+이번 도전은 꼭 성공했으면 좋겠어.
+무대 위에서 빛나는 모습도, 조용히 연습하는 시간도
+다 보지 못해도 언제나 응원하고 있을게.
+
+태어나줘서 고마워, 한원이의 오늘과 내일을 항상 응원해 (≧∇≦)`,
+        tag: "KR · 응원"
+      },
+      {
+        id: 3,
+        emoji: "🌙",
+        title: "멀리서 보는 같은 달 아래에서",
+        date: "2024.11.28",
+        from: "someone far away",
+        preview: "멀리서 같은 달을 보면서, 오늘 너의 하루가 웃음으로 가득했기를…",
+        content: `멀리서 같은 달을 보면서,
+오늘 너의 하루가 웃음으로 가득했기를 빌었어.
+
+시간이 지나도, 계절이 몇 번을 바뀌어도
+한원을 응원하는 마음은 조용히 제자리에서 빛날 거야.
+
+Happy Birthday, and keep shining. ✨`,
+        tag: "EN · message"
+      }
+      // ⬆ 여기 아래로 계속 {…} 복붙해서 id: 4, 5, 6… 이런 식으로 추가
+    ];
+
+    const cardGrid = document.getElementById("cardGrid");
+    const modal = document.getElementById("letterModal");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalMeta = document.getElementById("modalMeta");
+    const modalContent = document.getElementById("modalContent");
+    const modalFooter = document.getElementById("modalFooter");
+    const modalCloseBtn = document.getElementById("modalCloseBtn");
+    const lettersCount = document.getElementById("lettersCount");
+
+    function renderCards() {
+      cardGrid.innerHTML = "";
+      LETTERS.forEach((letter) => {
+        const card = document.createElement("article");
+        card.className = "letter-card";
+        card.dataset.id = letter.id;
+
+        card.innerHTML = `
+          <div class="letter-main">
+            <div class="letter-emoji">${letter.emoji || "💌"}</div>
+            <div class="letter-texts">
+              <div class="letter-title">${letter.title}</div>
+              <div class="letter-preview">${letter.preview || ""}</div>
+            </div>
+          </div>
+          <div class="letter-meta">
+            <div class="letter-meta-left">
+              <span>${letter.date || ""}</span>
+              <span>From. ${letter.from || ""}</span>
+              ${
+                letter.tag
+                  ? `<span class="letter-tag">${letter.tag}</span>`
+                  : ""
+              }
+            </div>
+            <div class="letter-open">
+              <span class="icon">➤</span>
+              <span>편지 열기</span>
+            </div>
+          </div>
+        `;
+
+        card.addEventListener("click", () => openModal(letter.id));
+        cardGrid.appendChild(card);
+      });
+
+      // 상단 배지에 편지 개수 표시
+      lettersCount.textContent = `${LETTERS.length} letters`;
+    }
+
+    function openModal(id) {
+      const letter = LETTERS.find((l) => l.id === id);
+      if (!letter) return;
+
+      modalTitle.textContent = letter.title;
+      modalMeta.textContent = `${letter.date || ""} · From. ${
+        letter.from || ""
+      }`;
+      modalContent.textContent = letter.content;
+      modalFooter.textContent = letter.from ? `From. ${letter.from}` : "";
+
+      modal.classList.remove("hidden");
+    }
+
+    function closeModal() {
+      modal.classList.add("hidden");
+    }
+
+    modalCloseBtn.addEventListener("click", closeModal);
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) closeModal();
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && !modal.classList.contains("hidden")) {
+        closeModal();
+      }
+    });
+
+    renderCards();
+  </script>
+</body>
+</html>
