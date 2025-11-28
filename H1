@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>HBDtoHW</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #0b1020;
+      --paper: #f7f1e8;
+      --paper-line: #e2d5c5;
+      --accent: #f5c04f;
+      --text-main: #2f2720;
+      --text-sub: #7a6c5f;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Noto Sans KR", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at top, #202a50 0, #050814 60%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px 12px;
+      color: #fff;
+    }
+
+    .wrap {
+      width: 100%;
+      max-width: 720px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .emoji {
+      font-size: 32px;
+      margin-bottom: 4px;
+    }
+
+    .title {
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      color: #c3c6d8;
+    }
+
+    .card {
+      background: rgba(10, 13, 28, 0.96);
+      border-radius: 20px;
+      padding: 16px 14px 18px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.7);
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .meta {
+      font-size: 11px;
+      color: #a9aec5;
+    }
+
+    .badge {
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(245, 192, 79, 0.7);
+      background: rgba(245, 192, 79, 0.1);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #fddf91;
+    }
+
+    .badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 10px rgba(245, 192, 79, 0.8);
+    }
+
+    .paper-wrap {
+      margin-top: 10px;
+      background: var(--paper);
+      border-radius: 16px;
+      padding: 18px 16px;
+      position: relative;
+      overflow: hidden;
+
+      /* 접혀 있다가 펼쳐지는 애니메이션용 */
+      max-height: 0;
+      opacity: 0;
+      transform: translateY(4px);
+      transition: max-height 0.35s ease, opacity 0.25s ease, transform 0.25s ease;
+      pointer-events: none;
+    }
+
+    .paper-wrap.open {
+      max-height: 400px; /* 편지 길이에 맞게 적당히 크게 */
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .paper-wrap::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(
+        to bottom,
+        transparent 0,
+        transparent 22px,
+        var(--paper-line) 23px
+      );
+      background-size: 100% 24px;
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    .paper-inner {
+      position: relative;
+      color: var(--text-main);
+      font-size: 14px;
+      line-height: 1.7;
+      white-space: pre-wrap;
+    }
+
+    .paper-footer {
+      position: relative;
+      margin-top: 16px;
+      font-size: 13px;
+      color: var(--text-sub);
+      text-align: right;
+    }
+
+    .open-btn {
+      margin-top: 10px;
+      display: flex;
+      justify-content: center;
+    }
+
+    button {
+      border-radius: 999px;
+      padding: 9px 16px;
+      font-size: 13px;
+      border: none;
+      cursor: pointer;
+      background: linear-gradient(135deg, #f5c04f, #f3a93b);
+      color: #1a1308;
+      font-weight: 600;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+    }
+
+    button span.icon {
+      font-size: 16px;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.03);
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.7);
+    }
+
+    .hint {
+      margin-top: 8px;
+      font-size: 11px;
+      color: #a9aec5;
+      text-align: center;
+    }
+
+    footer {
+      margin-top: 12px;
+      font-size: 10px;
+      text-align: right;
+      color: #898ea6;
+    }
+
+    @media (max-width: 540px) {
+      .card {
+        padding: 14px 12px 16px;
+      }
+      .paper-wrap {
+        padding: 14px 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="header">
+      <div class="emoji">💌</div>
+      <div class="title">HBDtoHW</div>
+      <p class="subtitle">
+        한원이를 향한 사랑을 <br />
+        웹페이지로 담아둔 공간입니다.
+      </p>
+    </header>
+
+    <div class="card">
+      <div class="card-top">
+        <div>
+          <div class="card-title">받은 편지</div>
+          <div class="meta">버튼을 누르면 편지 내용이 펼쳐집니다.</div>
+        </div>
+        <div class="badge">
+          <span class="badge-dot"></span>
+          <span>LETTER</span>
+        </div>
+      </div>
+
+      <div class="open-btn">
+        <button id="openBtn" type="button">
+          <span class="icon">📨</span>
+          <span>편지 열기</span>
+        </button>
+      </div>
+      <p class="hint">※ 이 페이지의 편지 내용은 코드 안에만 저장되어 있으며, 파일을 수정하지 않는 한 항상 그대로 유지됩니다.</p>
+
+      <div id="letterPaper" class="paper-wrap">
+        <div class="paper-inner" id="letterText">
+哥哥~生日快乐，感谢一直为哥哥加油的人们慷慨地分享爱。❤️虽然离得很远，但心最亲近的是粉丝和偶像的距离，非常爱你  希望生日那天多吃点~做所有想做的事。我很爱你，请知道我总是在远处为你加油，谢谢你再次挑战成为偶像的梦想
+        </div>
+        <div class="paper-footer">
+          From. hruwa
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      개인용 편지 보기 페이지
+    </footer>
+  </div>
+
+  <script>
+    const openBtn = document.getElementById("openBtn");
+    const letterPaper = document.getElementById("letterPaper");
+
+    let isOpen = false;
+
+    // 처음에는 닫힌 상태로 시작
+    letterPaper.classList.remove("open");
+
+    openBtn.addEventListener("click", () => {
+      isOpen = !isOpen;
+      if (isOpen) {
+        letterPaper.classList.add("open");
+        openBtn.innerHTML = '<span class="icon">📭</span><span>편지 접기</span>';
+      } else {
+        letterPaper.classList.remove("open");
+        openBtn.innerHTML = '<span class="icon">📨</span><span>편지 열기</span>';
+      }
+    });
+  </script>
+</body>
+</html>
